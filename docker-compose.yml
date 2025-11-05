@@ -1,0 +1,30 @@
+version: "3.8"
+
+services:
+  app:
+    build: .
+    container_name: saint-seiya-awakening
+    restart: always
+    ports:
+      - "8080:8080"
+    env_file:
+      - .env
+    # volumes:
+    #   - .:/app
+    # command: air -c .air.toml
+
+  db:
+    image: postgres:16
+    container_name: saintseiya_db
+    restart: always
+    environment:
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASS}
+      POSTGRES_DB: ${DB_NAME}
+    ports:
+      - "5432:5432"
+    volumes:
+      - db_data:/var/lib/postgresql/data
+
+volumes:
+  db_data:
