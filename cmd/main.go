@@ -4,6 +4,8 @@ import (
 	"log"
 	"saint-seiya-awakening/internal/config"
 	"saint-seiya-awakening/internal/database"
+	"saint-seiya-awakening/internal/models"
+	"saint-seiya-awakening/internal/routes"
 
 	"github.com/gin-gonic/gin"
 )
@@ -11,16 +13,11 @@ import (
 func main() {
 	config.Load()
 	database.ConnectDb()
-	
+
+	database.DB.AutoMigrate(&models.User{})
+
 	router := gin.Default()
+	routes.SetupRoutes(router)
 
-	router.GET("/ping", func(c *gin.Context) {
-		c.JSON(200, gin.H{
-			"message": "pong",
-		})
-	})
-
-	port := config.Cfg.Port
-	log.Printf("Starting server on port %s", port)
-	router.Run(":" + port)
+	log.Fatal(router.Run(":" + config.Cfg.Port))
 }

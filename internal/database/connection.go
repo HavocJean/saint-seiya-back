@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 	"saint-seiya-awakening/internal/config"
+	"time"
 
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
@@ -20,12 +21,22 @@ func ConnectDb() {
 		config.Cfg.DBPort,
 	)
 
-	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
+	var db *gorm.DB
+	var err error
+	maxAttempts := 15
 
-	if err != nil {
-		log.Fatalf("Failed to connect to database: %v", err)
+	for attempt := 1; attempt <= maxAttempts; attempt++ {
+		db, err = gorm.Open(postgres.Open(dsn), &gorm.Config{})
+		if err == nil {
+			DB = db
+			log.Println("Database connection established")
+			return
+		}
+
+		wait := time.Duration(attempt*500) * time.Millisecond
+		log.Printf("Database not ready (attempt %d/%d): %v — retrying in %s", attempt, maxAttempts, err, wait)
+		time.Sleep(wait)
 	}
 
-	DB = db
-	log.Println("Database connection established")
+	log.Fatalf("Failed to connect to database after %d attempts: %v", maxAttempts, err)
 }
