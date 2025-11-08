@@ -15,6 +15,7 @@ func main() {
 	database.ConnectDb()
 
 	database.DB.AutoMigrate(&models.User{})
+	database.DB.AutoMigrate(&models.Knight{})
 
 	router := gin.Default()
 	routes.SetupRoutes(router)

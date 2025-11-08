@@ -7,7 +7,7 @@ import (
 type Knight struct {
 	ID				uint	  `gorm:"primaryKey" json:"id"`
 	Name			string    `gorm:"size:100;not null" json:"name"`
-	Rank			string    `gorm:"size:50;not null" json:"rank"`
+	Rank			string    `gorm:"size:10;not null" json:"rank"`
 	Pv				int       `gorm:"not null" json:"pv"`
 	AtkC			int       `gorm:"not null" json:"atk_c"`
 	DefC			int       `gorm:"not null" json:"def_c"`
@@ -20,6 +20,7 @@ type Knight struct {
 	CritDamageC		float64   `gorm:"not null" json:"crit_damage_c"`
 	CritEffectF		float64   `gorm:"not null" json:"crit_effect_f"`
 	CritResistF     float64   `gorm:"not null" json:"crit_resist_f"`
+	ImageURL		string    `gorm:"size:255" json:"image_url"`
 	CreatedAt       time.Time `json:"created_at"`
 	UpdatedAt       time.Time `json:"updated_at"`
 }
