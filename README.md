@@ -41,7 +41,26 @@ docker compose up --build
 - `GET /api/v1/knights` - Listar todos os cavaleiros
 - `GET /api/v1/knights/:id` - Buscar cavaleiro por ID
 - `POST /api/v1/admin/knights` - Criar novo cavaleiro (autenticação necessária)
-  - Body: `{ "name": "string", ... }`
+  - Body: 
+    ```json
+    {
+        "name": "string",
+        "rank": "string",
+        "pv": 0,
+        "atk_c": 0,
+        "def_c": 0,
+        "def_f": 0,
+        "atq_f": 0,
+        "speed": 0,
+        "status_hit": 0,
+        "crit_level_f": 0,
+        "status_resist": 0,
+        "crit_damage_c": 0,
+        "crit_effect_f": 0,
+        "crit_resist_f": 0,
+        "image_url": "https://url/knight.png"
+    }
+    ```
 
 ### Cosmos
 - `POST /api/v1/admin/cosmos` - Criar novo cosmo (autenticação necessária)
