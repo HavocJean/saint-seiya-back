@@ -2,7 +2,8 @@ package routes
 
 import (
 	"saint-seiya-awakening/internal/controllers"
-	
+	"saint-seiya-awakening/internal/middleware"
+
 	"github.com/gin-gonic/gin"
 )
 
@@ -12,12 +13,13 @@ func SetupRoutes(router *gin.Engine) {
 
 	user := router.Group("/api/v1")
 	{
-		user.GET("/knights", controller.getKnights)
-		user.GET("/knights/:id", controller.getKnightById)
+		user.GET("/knights", controllers.GetKnights)
+		user.GET("/knights/:id", controllers.GetKnightById)
 	}
 
 	admin := router.Group("/api/v1/admin", middleware.AuthMiddleware())
 	{
-		admin.POST("/knights", controller.createKnight)
+		admin.POST("/knights", controllers.CreateKnight)
+		admin.POST("/cosmos", controllers.CreateCosmo)
 	}
 }

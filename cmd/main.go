@@ -4,7 +4,6 @@ import (
 	"log"
 	"saint-seiya-awakening/internal/config"
 	"saint-seiya-awakening/internal/database"
-	"saint-seiya-awakening/internal/models"
 	"saint-seiya-awakening/internal/routes"
 
 	"github.com/gin-gonic/gin"
@@ -14,8 +13,9 @@ func main() {
 	config.Load()
 	database.ConnectDb()
 
-	database.DB.AutoMigrate(&models.User{})
-	database.DB.AutoMigrate(&models.Knight{})
+	if config.Cfg.RunMigrations == "true" {
+		database.MigrateDB()
+	}
 
 	router := gin.Default()
 	routes.SetupRoutes(router)

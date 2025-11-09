@@ -8,12 +8,13 @@ import (
 )
 
 type Config struct {
-	Port		string
-	DBHost		string
-	DBPort		string
-	DBUser		string
-	DBPass		string
-	DBName		string
+	Port          string
+	DBHost        string
+	DBPort        string
+	DBUser        string
+	DBPass        string
+	DBName        string
+	RunMigrations string
 }
 
 var Cfg Config
@@ -26,12 +27,13 @@ func Load() {
 	}
 
 	Cfg = Config{
-		Port:   os.Getenv("PORT"),
-		DBHost: os.Getenv("DB_HOST"),
-		DBPort: os.Getenv("DB_PORT"),
-		DBUser: os.Getenv("DB_USER"),
-		DBPass: os.Getenv("DB_PASS"),
-		DBName: os.Getenv("DB_NAME"),
+		Port:          os.Getenv("PORT"),
+		DBHost:        os.Getenv("DB_HOST"),
+		DBPort:        os.Getenv("DB_PORT"),
+		DBUser:        os.Getenv("DB_USER"),
+		DBPass:        os.Getenv("DB_PASS"),
+		DBName:        os.Getenv("DB_NAME"),
+		RunMigrations: os.Getenv("RUN_MIGRATIONS"),
 	}
 }
 
