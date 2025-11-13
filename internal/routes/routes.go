@@ -14,6 +14,8 @@ func SetupRoutes(router *gin.Engine) {
 	user := router.Group("/api/v1")
 	{
 		user.POST("/login", controllers.LoginUser)
+		user.GET("/cosmos", controllers.GetCosmos)
+		user.GET("/cosmos/:id", controllers.GetCosmosById)
 		user.GET("/knights", controllers.GetKnights)
 		user.GET("/knights/:id", controllers.GetKnightById)
 	}
