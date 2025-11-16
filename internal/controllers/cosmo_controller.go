@@ -62,7 +62,8 @@ func GetCosmos(c *gin.Context) {
 func GetCosmosById(c *gin.Context) {
 	id := c.Param("id")
 	var cosmo models.Cosmo
-	if err := database.DB.First(&cosmo, id).Error; err != nil {
+
+	if err := database.DB.Preload("BaseAttributes").First(&cosmo, id).Error; err != nil {
 		c.JSON(http.StatusNotFound, gin.H{"error": "Cosmo not found"})
 	}
 
