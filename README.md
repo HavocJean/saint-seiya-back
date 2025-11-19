@@ -62,6 +62,24 @@ docker compose up --build
     }
     ```
 
+### Habilidades dos Cavaleiros
+- `POST /api/v1/admin/knights/:id/skills` - Criar habilidade para um cavaleiro (autenticação necessária)
+  - Body:
+    ```json
+    {
+      "name": "string",
+      "type": "string",
+      "image_url": "string (opcional)",
+      "description": "string",
+      "levels": [
+        {
+          "level": 0,
+          "description": "string"
+        }
+      ]
+    }
+    ```
+
 ### Cosmos
 - `POST /api/v1/admin/cosmos` - Criar novo cosmo (autenticação necessária)
   - Body: 

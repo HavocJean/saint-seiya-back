@@ -50,7 +50,15 @@ func CreateCosmo(c *gin.Context) {
 
 func GetCosmos(c *gin.Context) {
 	var cosmos []models.Cosmo
-	if err := database.DB.Find(&cosmos).Error; err != nil {
+	cosmoColor := c.Query("color")
+
+	query := database.DB
+
+	if cosmoColor != "" {
+		query = query.Where("color = ?", cosmoColor)
+	}
+
+	if err := query.Find(&cosmos).Error; err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to retrieve cosmos"})
 	}
 

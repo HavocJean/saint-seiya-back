@@ -7,9 +7,10 @@ import (
 type CosmoColor string
 
 const (
-	CosmoRed    CosmoColor = "red"
-	CosmoBlue   CosmoColor = "blue"
-	CosmoYellow CosmoColor = "yellow"
+	CosmoRed       CosmoColor = "red"
+	CosmoBlue      CosmoColor = "blue"
+	CosmoYellow    CosmoColor = "yellow"
+	CosmoLegendary CosmoColor = "legendary"
 )
 
 type Cosmo struct {
