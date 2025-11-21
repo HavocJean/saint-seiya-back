@@ -33,9 +33,11 @@ type CreateKnightSkillLevel struct {
 	Description string `json:"description" binding:"required"`
 }
 
-// type KnightResponse struct {
-
-// }
+type KnightsResponse struct {
+	ID       uint   `json:"id"`
+	Name     string `json:"name"`
+	ImageUrl string `json:"image_url"`
+}
 
 // type SkillResponse struct {
 

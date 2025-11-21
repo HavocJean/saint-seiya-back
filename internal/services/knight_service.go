@@ -44,8 +44,8 @@ func (s *KnightService) CreateKnight(req *dto.CreateKnightRequest) (*models.Knig
 	return knight, nil
 }
 
-func (s *KnightService) GetAllKnights(page, limit int, rank string) ([]models.Knight, error) {
-	var knights []models.Knight
+func (s *KnightService) GetAllKnights(page, limit int, rank string) ([]dto.KnightsResponse, error) {
+	var knights []dto.KnightsResponse
 	offset := (page - 1) * limit
 
 	query := database.DB.Model(&models.Knight{})
