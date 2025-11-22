@@ -52,14 +52,25 @@ func (s *KnightService) CreateKnight(req *dto.CreateKnightRequest) (*models.Knig
 	return knight, nil
 }
 
-func (s *KnightService) GetAllKnights(page, limit int, rank string) ([]dto.KnightsResponse, error) {
+func (s *KnightService) GetAllKnights(page, limit int, rank string, name string) ([]dto.KnightsResponse, error) {
 	var knights []dto.KnightsResponse
 	offset := (page - 1) * limit
 
 	query := database.DB.Model(&models.Knight{})
 
-	if rank != "" {
+	filterByRanks := map[string]bool{
+		"SS": true,
+		"EX": true,
+		"S":  true,
+		"A":  true,
+	}
+
+	if filterByRanks[rank] {
 		query = query.Where("rank = ?", rank)
+	}
+
+	if name != "" {
+		query = query.Where("name ILIKE ?", "%"+name+"%")
 	}
 
 	if err := query.

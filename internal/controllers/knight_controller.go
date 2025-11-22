@@ -34,6 +34,7 @@ func GetKnights(c *gin.Context) {
 	page := 1
 	limit := 20
 	rank := c.Query("rank")
+	name := c.Query("name")
 
 	if p := c.Query("page"); p != "" {
 		if parsed, err := strconv.Atoi(p); err == nil && parsed > 0 {
@@ -47,7 +48,7 @@ func GetKnights(c *gin.Context) {
 		}
 	}
 
-	knights, err := knightService.GetAllKnights(page, limit, rank)
+	knights, err := knightService.GetAllKnights(page, limit, rank, name)
 	if err != nil {
 		responses.Error(c, http.StatusInternalServerError, "Error internal to get knights", err.Error())
 		return
