@@ -7,7 +7,7 @@ type CreateTeamRequest struct {
 }
 
 type CreateTeamKnight struct {
-	TeamID   uint `json:"team_id" binding:"required"`
+	TeamID   uint `json:"team_id"`
 	KnightID uint `json:"knight_id" binding:"required"`
 }
 
