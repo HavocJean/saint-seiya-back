@@ -19,13 +19,13 @@ func SetupRoutes(router *gin.Engine) {
 
 		v1.GET("/knights", controllers.GetKnights)
 		v1.GET("/knights/:id", controllers.GetKnightById)
-
-		// v1.POST("/build", controllers.CreateBuild)
 	}
 
 	userAuth := v1.Group("/", middleware.AuthJwtMiddleware())
 	{
 		userAuth.GET("/profile", controllers.GetUserProfile)
+		userAuth.POST("/team", controllers.CreateTeam)
+		userAuth.POST("/team/add/:id", controllers.AddKnightToTeam)
 	}
 
 	adminAuth := v1.Group("/admin", middleware.AdminAuthMiddleware())

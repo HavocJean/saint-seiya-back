@@ -15,6 +15,10 @@ func MigrateDB() {
 	DB.AutoMigrate(&models.CosmoSubAttribute{})
 	DB.AutoMigrate(&models.KnightSkill{})
 	DB.AutoMigrate(&models.KnightSkillLevel{})
+	DB.AutoMigrate(&models.Team{})
+	DB.AutoMigrate(&models.TeamKnight{})
+	DB.AutoMigrate(&models.TeamVote{})
+	DB.AutoMigrate(&models.TeamFavorite{})
 
 	log.Println("Migrations completed successfully")
 }
