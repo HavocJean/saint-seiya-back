@@ -73,3 +73,35 @@ func (s *TeamService) AddKnightToTeam(req *dto.CreateTeamKnight) (*models.TeamKn
 
 	return teamKnight, nil
 }
+
+func (s *TeamService) DeleteTeam(teamId uint, userId uint) (*models.Team, error) {
+	var team models.Team
+
+	if err := database.DB.
+		Where("team_id = ? AND user_id = ?", teamId, userId).
+		First(&team).Error; err != nil {
+		return nil, fmt.Errorf("team not found: %w", err)
+	}
+
+	if err := database.DB.Delete(&team).Error; err != nil {
+		return nil, fmt.Errorf("failed to delete team: %w", err)
+	}
+
+	return &team, nil
+}
+
+func (s *TeamService) DeleteTeamKnight(teamId uint, knightId uint) (*models.TeamKnight, error) {
+	var teamKnight models.TeamKnight
+
+	if err := database.DB.
+		Where("team_id = ? AND knight_id = ?", teamId, knightId).
+		First(&teamKnight).Error; err != nil {
+		return nil, fmt.Errorf("team knight not found: %w", err)
+	}
+
+	if err := database.DB.Delete(&teamKnight).Error; err != nil {
+		return nil, fmt.Errorf("failed to delete knight from team: %w", err)
+	}
+
+	return &teamKnight, nil
+}

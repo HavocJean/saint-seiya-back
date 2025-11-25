@@ -61,3 +61,47 @@ func AddKnightToTeam(c *gin.Context) {
 
 	responses.Success(c, http.StatusCreated, "Add knight to the team successfully", team)
 }
+
+func DeleteTeam(c *gin.Context) {
+	idString := c.Param("id")
+	teamId, err := strconv.ParseUint(idString, 10, 64)
+	if err != nil {
+		responses.Error(c, http.StatusBadRequest, "ID invalid", "ID must be a number")
+		return
+	}
+
+	userID, exists := c.Get("userID")
+	if !exists {
+		responses.Error(c, http.StatusUnauthorized, "User ID not found in token", "Unauthorized")
+		return
+	}
+
+	team, err := teamService.DeleteTeam(uint(teamId), userID.(uint))
+	if err != nil {
+		responses.Error(c, http.StatusBadRequest, "Failed to delete knight in team", err.Error())
+		return
+	}
+
+	responses.Success(c, http.StatusNoContent, "Delete team successfully", team)
+}
+
+func DeleteTeamKnight(c *gin.Context) {
+	teamIdStr := c.Param("teamId")
+	teamId, errTeamId := strconv.ParseUint(teamIdStr, 10, 64)
+
+	knightIdStr := c.Param("knightId")
+	knightId, errKnightId := strconv.ParseUint(knightIdStr, 10, 64)
+
+	if errTeamId != nil || errKnightId != nil {
+		responses.Error(c, http.StatusBadRequest, "ID invalid", "ID must be a number")
+		return
+	}
+
+	team, err := teamService.DeleteTeamKnight(uint(teamId), uint(knightId))
+	if err != nil {
+		responses.Error(c, http.StatusBadRequest, "ID invalid", "ID must be a number")
+		return
+	}
+
+	responses.Success(c, http.StatusNoContent, "Delete knight from team successfully", team)
+}
