@@ -20,6 +20,14 @@ func CreateTeam(c *gin.Context) {
 		return
 	}
 
+	userID, exists := c.Get("userID")
+	if !exists {
+		responses.Error(c, http.StatusUnauthorized, "User ID not found in token", "Unauthorized")
+		return
+	}
+
+	req.UserID = userID.(uint)
+
 	team, err := teamService.CreateTeam(&req)
 	if err != nil {
 		responses.Error(c, http.StatusBadRequest, "Failed to create team", err.Error())

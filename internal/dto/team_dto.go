@@ -2,7 +2,7 @@ package dto
 
 type CreateTeamRequest struct {
 	Name     string `json:"name" binding:"required"`
-	UserID   uint   `json:"user_id" binding:"required"`
+	UserID   uint   `json:"-"`
 	IsPublic bool   `json:"is_public" binding:"required"`
 }
 
