@@ -26,3 +26,10 @@ func Error(c *gin.Context, statusCode int, message string, err string) {
 		Error:   err,
 	})
 }
+
+func Deleted(c *gin.Context, statusCode int, message string) {
+	c.JSON(statusCode, Response{
+		Success: true,
+		Message: message,
+	})
+}

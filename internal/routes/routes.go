@@ -26,8 +26,8 @@ func SetupRoutes(router *gin.Engine) {
 		userAuth.GET("/profile", controllers.GetUserProfile)
 
 		userAuth.POST("/team", controllers.CreateTeam)
-		userAuth.POST("/team/add/:id", controllers.AddKnightToTeam)
-		userAuth.DELETE("/team/:id", controllers.DeleteTeam)
+		userAuth.POST("/team/add/:teamId", controllers.AddKnightToTeam)
+		userAuth.DELETE("/team/:teamId", controllers.DeleteTeam)
 		userAuth.DELETE("/team/:teamId/knight/:knightId", controllers.DeleteTeamKnight)
 	}
 

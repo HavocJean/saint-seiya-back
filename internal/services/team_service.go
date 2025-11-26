@@ -78,7 +78,7 @@ func (s *TeamService) DeleteTeam(teamId uint, userId uint) (*models.Team, error)
 	var team models.Team
 
 	if err := database.DB.
-		Where("team_id = ? AND user_id = ?", teamId, userId).
+		Where("id = ? AND user_id = ?", teamId, userId).
 		First(&team).Error; err != nil {
 		return nil, fmt.Errorf("team not found: %w", err)
 	}
@@ -86,6 +86,10 @@ func (s *TeamService) DeleteTeam(teamId uint, userId uint) (*models.Team, error)
 	if err := database.DB.Delete(&team).Error; err != nil {
 		return nil, fmt.Errorf("failed to delete team: %w", err)
 	}
+
+	database.DB.Where("team_id = ?", teamId).Delete(&models.TeamKnight{})
+	// database.DB.Where("team_id = ?", teamId).Delete(&models.TeamFavorite{})
+	// database.DB.Where("team_id = ?", teamId).Delete(&models.TeamVote{})
 
 	return &team, nil
 }
