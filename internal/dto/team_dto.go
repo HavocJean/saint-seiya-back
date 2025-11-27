@@ -17,5 +17,14 @@ type CreateTeamVote struct {
 type CreateTeamFavorite struct {
 }
 
-type TeamResponse struct {
+type TeamWithKnightResponse struct {
+	ID      uint                 `json:"id"`
+	Name    string               `json:"name"`
+	Knights []TeamKnightResponse `json:"knights"`
+}
+
+type TeamKnightResponse struct {
+	KnightID uint   `json:"knight_id"`
+	Name     string `json:"name"`
+	ImageURL string `json:"image_url"`
 }

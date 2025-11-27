@@ -105,3 +105,28 @@ func DeleteTeamKnight(c *gin.Context) {
 
 	responses.Deleted(c, http.StatusNoContent, "Delete knight from team successfully")
 }
+
+func GetPublicTeams(c *gin.Context) {
+	page := 1
+	limit := 20
+
+	if p := c.Query("page"); p != "" {
+		if parsed, err := strconv.Atoi(p); err == nil && parsed > 0 {
+			page = parsed
+		}
+	}
+
+	if l := c.Query("limit"); l != "" {
+		if parsed, err := strconv.Atoi(l); err == nil && parsed > 0 && parsed <= 40 {
+			limit = parsed
+		}
+	}
+
+	publicTeams, err := teamService.GetPublicTeams(page, limit)
+	if err != nil {
+		responses.Error(c, http.StatusInternalServerError, "Error internal to get teams", err.Error())
+		return
+	}
+
+	responses.Success(c, http.StatusOK, "Teams retrieved successfuly", publicTeams)
+}

@@ -19,6 +19,8 @@ func SetupRoutes(router *gin.Engine) {
 
 		v1.GET("/knights", controllers.GetKnights)
 		v1.GET("/knights/:id", controllers.GetKnightById)
+
+		v1.GET("/teams/public", controllers.GetPublicTeams)
 	}
 
 	userAuth := v1.Group("/", middleware.AuthJwtMiddleware())

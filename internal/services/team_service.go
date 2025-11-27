@@ -109,3 +109,40 @@ func (s *TeamService) DeleteTeamKnight(teamId uint, knightId uint) (*models.Team
 
 	return &teamKnight, nil
 }
+
+func (s *TeamService) GetPublicTeams(page, limit int) ([]dto.TeamWithKnightResponse, error) {
+	var teams []models.Team
+	offset := (page - 1) * limit
+
+	err := database.DB.
+		Preload("TeamKnights.Knight").
+		Where("is_public = ?", true).
+		Offset(offset).
+		Limit(limit).
+		Find(&teams).Error
+
+	if err != nil {
+		return nil, fmt.Errorf("failed to find teams: %w", err)
+	}
+
+	var response []dto.TeamWithKnightResponse
+
+	for _, t := range teams {
+		var knights []dto.TeamKnightResponse
+		for _, tk := range t.TeamKnights {
+			knights = append(knights, dto.TeamKnightResponse{
+				KnightID: tk.KnightID,
+				Name:     tk.Knight.Name,
+				ImageURL: tk.Knight.ImageURL,
+			})
+		}
+
+		response = append(response, dto.TeamWithKnightResponse{
+			ID:      t.ID,
+			Name:    t.Name,
+			Knights: knights,
+		})
+	}
+
+	return response, nil
+}
