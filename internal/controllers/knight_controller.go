@@ -43,7 +43,7 @@ func GetKnights(c *gin.Context) {
 	}
 
 	if l := c.Query("limit"); l != "" {
-		if parsed, err := strconv.Atoi(l); err == nil && parsed > 0 && parsed <= 100 {
+		if parsed, err := strconv.Atoi(l); err == nil && parsed > 0 && parsed <= 40 {
 			limit = parsed
 		}
 	}
