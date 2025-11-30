@@ -1,13 +1,13 @@
-package models
+package entities
 
 import (
-	"saint-seiya-awakening/internal/domain/user"
+	"saint-seiya-back/internal/domain/user"
 	"time"
 
 	"gorm.io/gorm"
 )
 
-type User struct {
+type UserEntity struct {
 	ID        uint           `gorm:"primaryKey" json:"id"`
 	Name      string         `gorm:"size:100;not null" json:"name"`
 	Nickname  string         `gorm:"size:100;not null" json:"nickname"`
@@ -18,7 +18,7 @@ type User struct {
 	DeletedAt gorm.DeletedAt `gorm:"index" json:"-"`
 }
 
-func (u *User) BeforeCreate(tx *gorm.DB) error {
+func (u *UserEntity) BeforeCreate(tx *gorm.DB) error {
 	if u.Password != "" {
 		hashedPassword, err := user.HashedPassword(u.Password)
 

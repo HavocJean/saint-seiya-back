@@ -3,7 +3,7 @@ package database
 import (
 	"fmt"
 	"log"
-	"saint-seiya-awakening/internal/config"
+	"saint-seiya-back/internal/config"
 	"time"
 
 	"gorm.io/driver/postgres"
@@ -39,4 +39,8 @@ func ConnectDb() {
 	}
 
 	log.Fatalf("Failed to connect to database after %d attempts: %v", maxAttempts, err)
+}
+
+func GetDB() *gorm.DB {
+	return DB
 }

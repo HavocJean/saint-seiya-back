@@ -2,15 +2,15 @@ package database
 
 import (
 	"log"
-	"saint-seiya-awakening/internal/models"
+	"saint-seiya-back/internal/infrastructure/database/entities"
 )
 
 func MigrateDB() {
 	log.Println("Running database migrations...")
 
-	err := DB.AutoMigrate(&models.User{})
+	err := DB.AutoMigrate(&entities.UserEntity{})
 	if err != nil {
-		log.Fatalf("Migration failed: %w", err)
+		log.Fatalf("Migration failed: ", err)
 	}
 
 	log.Println("Migrations completed successfully")
