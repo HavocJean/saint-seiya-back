@@ -2,6 +2,7 @@ package responses
 
 import (
 	"github.com/gin-gonic/gin"
+	"github.com/go-playground/validator/v10"
 )
 
 type Response struct {
@@ -31,5 +32,19 @@ func Deleted(c *gin.Context, statusCode int, message string) {
 	c.JSON(statusCode, Response{
 		Success: true,
 		Message: message,
+	})
+}
+
+func ValidationError(c *gin.Context, statusCode int, err error) {
+	var errorMessages []string
+
+	for _, fieldErr := range err.(validator.ValidationErrors) {
+		errorMessages = append(errorMessages, fieldErr.Error())
+	}
+
+	c.JSON(statusCode, Response{
+		Success: false,
+		Message: "validation failed",
+		Error:   errorMessages,
 	})
 }

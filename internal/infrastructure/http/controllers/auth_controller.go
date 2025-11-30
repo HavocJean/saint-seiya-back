@@ -7,6 +7,7 @@ import (
 	"saint-seiya-back/internal/responses"
 
 	"github.com/gin-gonic/gin"
+	"github.com/go-playground/validator/v10"
 )
 
 type AuthController struct {
@@ -23,7 +24,12 @@ func NewAuthController(loginU *auth.LoginUseCase, registerU *auth.RegisterUseCas
 
 func (a *AuthController) RegisterUser(c *gin.Context) {
 	var req authdto.RegisterRequest
-	if err := c.ShouldBindBodyWithJSON(&req); err != nil {
+	if err := c.ShouldBindJSON(&req); err != nil {
+		if _, ok := err.(validator.ValidationErrors); ok {
+			responses.ValidationError(c, http.StatusBadRequest, err)
+			return
+		}
+
 		responses.Error(c, http.StatusBadRequest, "invalid JSON sent", err.Error())
 		return
 	}
@@ -44,7 +50,7 @@ func (a *AuthController) RegisterUser(c *gin.Context) {
 
 func (a *AuthController) LoginUser(c *gin.Context) {
 	var req authdto.LoginRequest
-	if err := c.ShouldBindBodyWithJSON(&req); err != nil {
+	if err := c.ShouldBindJSON(&req); err != nil {
 		responses.Error(c, http.StatusBadRequest, "Invalid JSON sent", err.Error())
 		return
 	}

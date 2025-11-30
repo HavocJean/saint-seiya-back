@@ -18,6 +18,10 @@ type UserEntity struct {
 	DeletedAt gorm.DeletedAt `gorm:"index" json:"-"`
 }
 
+func (UserEntity) TableName() string {
+	return "users"
+}
+
 func (u *UserEntity) BeforeCreate(tx *gorm.DB) error {
 	if u.Password != "" {
 		hashedPassword, err := user.HashedPassword(u.Password)
