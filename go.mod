@@ -1,4 +1,4 @@
-module saint-seiya-awakening
+module saint-seiya-back
 
 go 1.25.3
 

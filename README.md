@@ -11,8 +11,8 @@ API para gerenciar informações dos cavaleiros e cosmos do jogo Saint Seiya Awa
 ### Configuração
 1. Clone o repositório
 ```bash
-git clone https://github.com/HavocJean/saint-seiya-awakening.git
-cd saint-seiya-awakening
+git clone https://github.com/HavocJean/saint-seiya-back.git
+cd saint-seiya-back
 ```
 
 2. Configure as variáveis de ambiente (crie um arquivo .env a partir do .env-example):

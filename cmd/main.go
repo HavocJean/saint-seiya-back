@@ -3,9 +3,10 @@ package main
 import (
 	"log"
 	"os"
-	"saint-seiya-awakening/internal/config"
-	"saint-seiya-awakening/internal/database"
-	"saint-seiya-awakening/internal/routes"
+	"saint-seiya-back/internal/bootstrap"
+	"saint-seiya-back/internal/config"
+	"saint-seiya-back/internal/infrastructure/database"
+	"saint-seiya-back/internal/routes"
 	"time"
 
 	"github.com/gin-contrib/cors"
@@ -20,6 +21,8 @@ func main() {
 		database.MigrateDB()
 	}
 
+	app := bootstrap.InitApp()
+
 	router := gin.Default()
 	router.Use(cors.New(cors.Config{
 		AllowOrigins:     []string{os.Getenv("FRONTEND_URL")},
@@ -29,7 +32,7 @@ func main() {
 		AllowCredentials: true,
 		MaxAge:           12 * time.Hour,
 	}))
-	routes.SetupRoutes(router)
+	routes.SetupRoutes(router, app)
 
 	log.Fatal(router.Run(":" + config.Cfg.Port))
 }
