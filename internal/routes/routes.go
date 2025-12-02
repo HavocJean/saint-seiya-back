@@ -2,6 +2,7 @@ package routes
 
 import (
 	"saint-seiya-back/internal/bootstrap"
+	controllers "saint-seiya-back/internal_old/controllersOld"
 
 	"github.com/gin-gonic/gin"
 )
@@ -9,8 +10,12 @@ import (
 func SetupRoutes(router *gin.Engine, app *bootstrap.AppContext) {
 
 	v1 := router.Group("/api/v1")
+
 	v1.POST("/register", app.AuthController.RegisterUser)
 	v1.POST("/login", app.AuthController.LoginUser)
+
+	v1.GET("/knights", controllers.GetKnights)
+	v1.GET("/knights/:id", controllers.GetKnightById)
 
 	auth := v1.Group("")
 	auth.Use(app.AuthMiddleware)
@@ -22,9 +27,6 @@ func SetupRoutes(router *gin.Engine, app *bootstrap.AppContext) {
 	// {
 	// 	v1.GET("/cosmos", controllers.GetCosmos)
 	// 	v1.GET("/cosmos/:id", controllers.GetCosmosById)
-
-	// 	v1.GET("/knights", controllers.GetKnights)
-	// 	v1.GET("/knights/:id", controllers.GetKnightById)
 	// }
 
 	// userAuth := v1.Group("/", middleware.AuthJwtMiddleware())
@@ -38,9 +40,9 @@ func SetupRoutes(router *gin.Engine, app *bootstrap.AppContext) {
 	// }
 
 	// adminAuth := v1.Group("/admin", middleware.AdminAuthMiddleware())
-	// {
-	// 	adminAuth.POST("/knights", controllers.CreateKnight)
-	// 	adminAuth.POST("/knights/:id/skills", controllers.CreateKnightSkill)
+	// // {
+	// adminAuth.POST("/knights", controllers.CreateKnight)
+	// adminAuth.POST("/knights/:id/skills", controllers.CreateKnightSkill)
 	// 	adminAuth.POST("/cosmos", controllers.CreateCosmo)
 	// }
 }
