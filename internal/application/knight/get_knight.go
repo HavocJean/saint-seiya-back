@@ -1,9 +1,12 @@
 package knight
 
-import "saint-seiya-back/internal/application/knight/dto"
+import (
+	"saint-seiya-back/internal/application/knight/dto"
+	"saint-seiya-back/internal/domain/knight"
+)
 
 type GetKnightsUseCase struct {
-	Repository Repository
+	Repository knight.Repository
 }
 
 type GetKnightsInput struct {
@@ -13,14 +16,14 @@ type GetKnightsInput struct {
 	Name  string
 }
 
-func NewGetKnightUseCase(repo Repository) *GetKnightsUseCase {
+func NewGetKnightsUseCase(repo knight.Repository) *GetKnightsUseCase {
 	return &GetKnightsUseCase{
 		Repository: repo,
 	}
 }
 
 func (u *GetKnightsUseCase) Execute(input GetKnightsInput) ([]dto.GetKnightsResponse, error) {
-	knights, err := u.Repository.FindAll(input.Page, input.Limit, input.Rank, input.Name)
+	knights, err := u.Repository.GetKnights(input.Page, input.Limit, input.Rank, input.Name)
 	if err != nil {
 		return nil, err
 	}
@@ -35,5 +38,5 @@ func (u *GetKnightsUseCase) Execute(input GetKnightsInput) ([]dto.GetKnightsResp
 		})
 	}
 
-	return results, nil
+	return result, nil
 }
