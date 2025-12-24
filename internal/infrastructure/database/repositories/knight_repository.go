@@ -11,9 +11,9 @@ func NewKnightRepository() knight.Repository {
 	return &knightRepository{}
 }
 
-func (r *knightRepository) GetKnights(page, limit int, rank, name string) ([]knight.Knight, error) {
-	var result []knight.Knight
-	query := database.DB.Model(&knight.Knight{})
+func (r *knightRepository) GetKnights(page, limit int, rank, name string) ([]knight.KnightDomain, error) {
+	var result []knight.KnightDomain
+	query := database.DB.Model(&knight.KnightDomain{})
 	offset := (page - 1) * limit
 
 	if rank != "" {
@@ -28,14 +28,14 @@ func (r *knightRepository) GetKnights(page, limit int, rank, name string) ([]kni
 	return result, err
 }
 
-func (r *knightRepository) GetKnightById(id uint) (*knight.Knight, error) {
-	var result knight.Knight
+func (r *knightRepository) GetKnightById(id uint) (*knight.KnightDomain, error) {
+	var result knight.KnightDomain
 	err := database.DB.First(&result, id).Error
 
 	return &result, err
 }
 
-func (r *knightRepository) Create(k *knight.Knight) (*knight.Knight, error) {
+func (r *knightRepository) Create(k *knight.KnightDomain) (*knight.KnightDomain, error) {
 	err := database.DB.Create(k).Error
 
 	return k, err

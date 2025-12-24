@@ -1,7 +1,7 @@
 package knight
 
 type Repository interface {
-	GetKnights(page, limit int, rank, name string) ([]Knight, error)
-	GetKnightById(id uint) (*Knight, error)
-	Create(knight *Knight) (*Knight, error)
+	GetKnights(page, limit int, rank, name string) ([]KnightDomain, error)
+	GetKnightById(id uint) (*KnightDomain, error)
+	Create(knight *KnightDomain) (*KnightDomain, error)
 }

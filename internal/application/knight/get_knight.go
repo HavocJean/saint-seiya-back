@@ -30,11 +30,17 @@ func (u *GetKnightsUseCase) Execute(input GetKnightsInput) ([]dto.GetKnightsResp
 
 	var result []dto.GetKnightsResponse
 	for _, k := range knights {
+
+		imageURL := ""
+		if k.ImageURL != nil {
+			imageURL = *k.ImageURL
+		}
+
 		result = append(result, dto.GetKnightsResponse{
 			ID:       k.ID,
 			Name:     k.Name,
 			Rank:     k.Rank,
-			ImageURL: k.ImageURL,
+			ImageURL: imageURL,
 		})
 	}
 

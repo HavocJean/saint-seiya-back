@@ -41,7 +41,7 @@ func SetupRoutes(router *gin.Engine, app *bootstrap.AppContext) {
 
 	// adminAuth := v1.Group("/admin", middleware.AdminAuthMiddleware())
 	// // {
-	// adminAuth.POST("/knights", controllers.CreateKnight)
+	v1.POST("/knights", controllers.CreateKnight)
 	// adminAuth.POST("/knights/:id/skills", controllers.CreateKnightSkill)
 	// 	adminAuth.POST("/cosmos", controllers.CreateCosmo)
 	// }
