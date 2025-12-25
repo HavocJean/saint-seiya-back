@@ -14,7 +14,7 @@ func SetupRoutes(router *gin.Engine, app *bootstrap.AppContext) {
 	v1.POST("/login", app.AuthController.LoginUser)
 
 	v1.GET("/knights", app.KnightController.GetKnights)
-	v1.GET("/knights/:id", app.KnightController.GetKnightById)
+	v1.GET("/knights/:id", app.KnightController.GetKnightByID)
 
 	auth := v1.Group("")
 	auth.Use(app.AuthMiddleware)

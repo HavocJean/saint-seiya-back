@@ -13,7 +13,9 @@ import (
 )
 
 type KnightController struct {
-	createKnightUseCase *knight.CreateKnightUseCase
+	createKnightUseCase  *knight.CreateKnightUseCase
+	getKnightsUseCase    *knight.GetKnightsUseCase
+	getKnightByIdUseCase *knight.GetKnightByIdUseCase
 }
 
 func NewKnightController(
@@ -22,8 +24,8 @@ func NewKnightController(
 	getKnightByIdUseCase *knight.GetKnightByIdUseCase,
 ) *KnightController {
 	return &KnightController{
-		createKnightUseCase: createKnightUseCase,
-		getKnightsUseCase: getKnightsUseCase,
+		createKnightUseCase:  createKnightUseCase,
+		getKnightsUseCase:    getKnightsUseCase,
 		getKnightByIdUseCase: getKnightByIdUseCase,
 	}
 }
@@ -94,22 +96,22 @@ func (kc *KnightController) GetKnights(c *gin.Context) {
 	}
 
 	input := knight.GetKnightsInput{
-		Page: page,
-		Limit: limit, 
-		Rank: rank,
-		Name: name
+		Page:  page,
+		Limit: limit,
+		Rank:  rank,
+		Name:  name,
 	}
 
-	result, err := kc.GetKnightsUseCase.Execute(inpuit)
+	result, err := kc.getKnightsUseCase.Execute(input)
 	if err != nil {
-		responses.Error(c, http.StatusInternalServerError, "Error internal to get")
+		responses.Error(c, http.StatusInternalServerError, "Error internal to get", err.Error())
 		return
 	}
 
 	responses.Success(c, http.StatusOK, "Knights retrieved successfully", result)
 }
 
-func (kc *KnightController) GetKnightById(c *gin.Context) {
+func (kc *KnightController) GetKnightByID(c *gin.Context) {
 	idString := c.Param("id")
 	id, err := strconv.ParseUint(idString, 10, 64)
 
@@ -124,5 +126,5 @@ func (kc *KnightController) GetKnightById(c *gin.Context) {
 		return
 	}
 
-	responses.Success(c, http.StatusOk, "knight found", result)
+	responses.Success(c, http.StatusOK, "knight found", result)
 }
