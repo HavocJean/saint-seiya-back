@@ -2,7 +2,6 @@ package routes
 
 import (
 	"saint-seiya-back/internal/bootstrap"
-	controllers "saint-seiya-back/internal_old/controllersOld"
 
 	"github.com/gin-gonic/gin"
 )
@@ -14,8 +13,8 @@ func SetupRoutes(router *gin.Engine, app *bootstrap.AppContext) {
 	v1.POST("/register", app.AuthController.RegisterUser)
 	v1.POST("/login", app.AuthController.LoginUser)
 
-	v1.GET("/knights", controllers.GetKnights)
-	v1.GET("/knights/:id", controllers.GetKnightById)
+	v1.GET("/knights", app.KnightController.GetKnights)
+	v1.GET("/knights/:id", app.KnightController.GetKnightById)
 
 	auth := v1.Group("")
 	auth.Use(app.AuthMiddleware)
@@ -41,7 +40,7 @@ func SetupRoutes(router *gin.Engine, app *bootstrap.AppContext) {
 
 	// adminAuth := v1.Group("/admin", middleware.AdminAuthMiddleware())
 	// // {
-	v1.POST("/knights", controllers.CreateKnight)
+	v1.POST("/knights", app.KnightController.CreateKnight)
 	// adminAuth.POST("/knights/:id/skills", controllers.CreateKnightSkill)
 	// 	adminAuth.POST("/cosmos", controllers.CreateCosmo)
 	// }

@@ -2,6 +2,7 @@ package bootstrap
 
 import (
 	"saint-seiya-back/internal/application/auth"
+	"saint-seiya-back/internal/application/knight"
 	"saint-seiya-back/internal/config"
 	"saint-seiya-back/internal/infrastructure/database"
 	"saint-seiya-back/internal/infrastructure/database/repositories"
@@ -17,8 +18,9 @@ var once sync.Once
 var appCtxInstance *AppContext
 
 type AppContext struct {
-	AuthController *controllers.AuthController
-	AuthMiddleware gin.HandlerFunc
+	AuthController   *controllers.AuthController
+	KnightController *controllers.KnightController
+	AuthMiddleware   gin.HandlerFunc
 }
 
 func InitApp() *AppContext {
@@ -28,16 +30,28 @@ func InitApp() *AppContext {
 		jwtService := services.NewJwtService(config.Cfg.JWTSecret)
 
 		userRepository := repositories.NewUserRepository(db)
+		knightRepository := repositories.NewKnightRepository(db)
 
 		loginUseCase := auth.NewLoginUseCase(userRepository, jwtService)
 		registerUseCase := auth.NewRegisterUseCase(userRepository, jwtService)
 
+		createKnightUseCase := knight.NewCreateKnightUseCase(knightRepository)
+		getKnightsUseCase := knight.NewGetKnightsUseCase(knightRepository)
+		getKnightByIdUseCase := knight.NewGetKnightByIdUseCase(knightRepository)
+
 		authController := controllers.NewAuthController(loginUseCase, registerUseCase)
+		knightController := controllers.NewKnightController(
+			createKnightUseCase,
+			getKnightsUseCase,
+			getKnightByIdUseCase,
+		)
+
 		authMiddleware := middleware.AuthJwtMiddleware(jwtService)
 
 		appCtxInstance = &AppContext{
-			AuthController: authController,
-			AuthMiddleware: authMiddleware,
+			AuthController:   authController,
+			KnightController: knightController,
+			AuthMiddleware:   authMiddleware,
 		}
 	})
 

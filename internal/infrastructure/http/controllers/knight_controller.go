@@ -24,7 +24,7 @@ func NewKnightController(
 	return &KnightController{
 		createKnightUseCase: createKnightUseCase,
 		getKnightsUseCase: getKnightsUseCase,
-		getKnightByIdUseCase: getKnightByIdUseCase,g
+		getKnightByIdUseCase: getKnightByIdUseCase,
 	}
 }
 
