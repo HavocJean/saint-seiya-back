@@ -17,7 +17,7 @@ func SetupRoutes(router *gin.Engine, app *bootstrap.AppContext) {
 	v1.GET("/knights/:id", app.KnightController.GetKnightByID)
 
 	v1.GET("/cosmos", app.CosmoController.GetCosmos)
-	v1.GET("/cosmos/:id", app.CosmoController.GetCosmoByID)
+	v1.GET("/cosmos/:id", app.CosmoController.GetCosmoById)
 
 	auth := v1.Group("")
 	auth.Use(app.AuthMiddleware)
