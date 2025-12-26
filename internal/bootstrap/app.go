@@ -2,6 +2,7 @@ package bootstrap
 
 import (
 	"saint-seiya-back/internal/application/auth"
+	"saint-seiya-back/internal/application/cosmo"
 	"saint-seiya-back/internal/application/knight"
 	"saint-seiya-back/internal/config"
 	"saint-seiya-back/internal/infrastructure/database"
@@ -20,6 +21,7 @@ var appCtxInstance *AppContext
 type AppContext struct {
 	AuthController   *controllers.AuthController
 	KnightController *controllers.KnightController
+	CosmoController  *controllers.CosmoController
 	AuthMiddleware   gin.HandlerFunc
 }
 
@@ -31,6 +33,7 @@ func InitApp() *AppContext {
 
 		userRepository := repositories.NewUserRepository(db)
 		knightRepository := repositories.NewKnightRepository(db)
+		cosmoRepository := repositories.NewCosmoRepository(db)
 
 		loginUseCase := auth.NewLoginUseCase(userRepository, jwtService)
 		registerUseCase := auth.NewRegisterUseCase(userRepository, jwtService)
@@ -38,6 +41,8 @@ func InitApp() *AppContext {
 		createKnightUseCase := knight.NewCreateKnightUseCase(knightRepository)
 		getKnightsUseCase := knight.NewGetKnightsUseCase(knightRepository)
 		getKnightByIdUseCase := knight.NewGetKnightByIdUseCase(knightRepository)
+		getCosmosUseCase := cosmo.NewGetCosmosUseCase(cosmoRepository)
+		getCosmoByIdUseCase := cosmo.NewGetCosmoByIdUseCase(cosmoRepository)
 
 		authController := controllers.NewAuthController(loginUseCase, registerUseCase)
 		knightController := controllers.NewKnightController(
@@ -45,12 +50,17 @@ func InitApp() *AppContext {
 			getKnightsUseCase,
 			getKnightByIdUseCase,
 		)
+		cosmoController := controllers.NewCosmoController(
+			getCosmosUseCase,
+			getCosmoByIdUseCase,
+		)
 
 		authMiddleware := middleware.AuthJwtMiddleware(jwtService)
 
 		appCtxInstance = &AppContext{
 			AuthController:   authController,
 			KnightController: knightController,
+			CosmoController:  cosmoController,
 			AuthMiddleware:   authMiddleware,
 		}
 	})
