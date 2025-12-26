@@ -23,6 +23,7 @@ type AppContext struct {
 	KnightController *controllers.KnightController
 	CosmoController  *controllers.CosmoController
 	AuthMiddleware   gin.HandlerFunc
+	AdminMiddleware  gin.HandlerFunc
 }
 
 func InitApp() *AppContext {
@@ -56,12 +57,14 @@ func InitApp() *AppContext {
 		)
 
 		authMiddleware := middleware.AuthJwtMiddleware(jwtService)
+		adminMiddleware := middleware.AdminAuthMiddleware()
 
 		appCtxInstance = &AppContext{
 			AuthController:   authController,
 			KnightController: knightController,
 			CosmoController:  cosmoController,
 			AuthMiddleware:   authMiddleware,
+			AdminMiddleware:  adminMiddleware,
 		}
 	})
 

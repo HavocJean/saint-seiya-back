@@ -30,10 +30,11 @@ func SetupRoutes(router *gin.Engine, app *bootstrap.AppContext) {
 		// 	userAuth.DELETE("/team/:teamId/knight/:knightId", controllers.DeleteTeamKnight)
 	}
 
-	// adminAuth := v1.Group("/admin", middleware.AdminAuthMiddleware())
-	// // {
-	v1.POST("/knights", app.KnightController.CreateKnight)
-	// adminAuth.POST("/knights/:id/skills", controllers.CreateKnightSkill)
-	// 	adminAuth.POST("/cosmos", controllers.CreateCosmo)
-	// }
+	adminAuth := v1.Group("/admin")
+	adminAuth.Use(app.AdminMiddleware)
+	{
+		v1.POST("/knights", app.KnightController.CreateKnight)
+		// adminAuth.POST("/knights/:id/skills", controllers.CreateKnightSkill)
+		// 	adminAuth.POST("/cosmos", controllers.CreateCosmo)
+	}
 }

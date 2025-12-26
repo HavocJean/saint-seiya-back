@@ -15,6 +15,7 @@ type Config struct {
 	DBName        string
 	DBPort        string
 	JWTSecret     string
+	AdminToken    string
 	RunMigrations string
 }
 
@@ -33,6 +34,7 @@ func Load() {
 		DBPass:        os.Getenv("DB_PASS"),
 		DBName:        os.Getenv("DB_NAME"),
 		JWTSecret:     os.Getenv("JWT_SECRET"),
+		AdminToken:    os.Getenv("ADMIN_TOKEN"),
 		RunMigrations: os.Getenv("RUN_MIGRATIONS"),
 	}
 }
