@@ -24,16 +24,16 @@ func SetupRoutes(router *gin.Engine, app *bootstrap.AppContext) {
 	{
 		// 	userAuth.GET("/profile", controllers.GetUserProfile)
 
-		// userAuth.POST("/team", controllers.CreateTeam)
-		// userAuth.POST("/team/add/:id", controllers.AddKnightToTeam)
-		// userAuth.DELETE("/team/:id", controllers.DeleteTeam)
-		// userAuth.DELETE("/team/:teamId/knight/:knightId", controllers.DeleteTeamKnight)
+		auth.POST("/team", app.TeamController.CreateTeam)
+		auth.POST("/team/add/:id", app.TeamController.AddKnightToTeam)
+		auth.DELETE("/team/:id", app.TeamController.DeleteTeam)
+		auth.DELETE("/team/:teamId/knight/:knightId", app.TeamController.DeleteTeamKnight)
 	}
 
 	adminAuth := v1.Group("/admin")
 	adminAuth.Use(app.AdminMiddleware)
 	{
-		v1.POST("/knights", app.KnightController.CreateKnight)
+		adminAuth.POST("/knights", app.KnightController.CreateKnight)
 		// adminAuth.POST("/knights/:id/skills", controllers.CreateKnightSkill)
 		// 	adminAuth.POST("/cosmos", controllers.CreateCosmo)
 	}

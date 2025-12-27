@@ -13,6 +13,8 @@ func MigrateDB() {
 		&entities.KnightEntity{},
 		&entities.CosmoEntity{},
 		&entities.CosmoAttributeEntity{},
+		&entities.TeamEntity{},
+		&entities.TeamKnightEntity{},
 	)
 	if err != nil {
 		log.Fatalf("Migration failed: ", err)

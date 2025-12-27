@@ -4,6 +4,7 @@ import (
 	"saint-seiya-back/internal/application/auth"
 	"saint-seiya-back/internal/application/cosmo"
 	"saint-seiya-back/internal/application/knight"
+	"saint-seiya-back/internal/application/team"
 	"saint-seiya-back/internal/config"
 	"saint-seiya-back/internal/infrastructure/database"
 	"saint-seiya-back/internal/infrastructure/database/repositories"
@@ -22,6 +23,7 @@ type AppContext struct {
 	AuthController   *controllers.AuthController
 	KnightController *controllers.KnightController
 	CosmoController  *controllers.CosmoController
+	TeamController   *controllers.TeamController
 	AuthMiddleware   gin.HandlerFunc
 	AdminMiddleware  gin.HandlerFunc
 }
@@ -35,6 +37,7 @@ func InitApp() *AppContext {
 		userRepository := repositories.NewUserRepository(db)
 		knightRepository := repositories.NewKnightRepository(db)
 		cosmoRepository := repositories.NewCosmoRepository(db)
+		teamRepository := repositories.NewTeamRepository(db)
 
 		loginUseCase := auth.NewLoginUseCase(userRepository, jwtService)
 		registerUseCase := auth.NewRegisterUseCase(userRepository, jwtService)
@@ -42,8 +45,14 @@ func InitApp() *AppContext {
 		createKnightUseCase := knight.NewCreateKnightUseCase(knightRepository)
 		getKnightsUseCase := knight.NewGetKnightsUseCase(knightRepository)
 		getKnightByIdUseCase := knight.NewGetKnightByIdUseCase(knightRepository)
+
 		getCosmosUseCase := cosmo.NewGetCosmosUseCase(cosmoRepository)
 		getCosmoByIdUseCase := cosmo.NewGetCosmoByIdUseCase(cosmoRepository)
+
+		createTeamUseCase := team.NewCreateTeamUseCase(teamRepository)
+		addKnightToTeamUseCase := team.NewAddKnightToTeamUseCase(teamRepository)
+		deleteKnightToTeamUseCase := team.NewDeleteKnightToTeamUseCase(teamRepository)
+		deleteTeamUseCase := team.NewDeleteTeamUseCase(teamRepository)
 
 		authController := controllers.NewAuthController(loginUseCase, registerUseCase)
 		knightController := controllers.NewKnightController(
@@ -56,6 +65,13 @@ func InitApp() *AppContext {
 			getCosmoByIdUseCase,
 		)
 
+		teamController := controllers.NewTeamController(
+			createTeamUseCase,
+			addKnightToTeamUseCase,
+			deleteTeamUseCase,
+			deleteKnightToTeamUseCase,
+		)
+
 		authMiddleware := middleware.AuthJwtMiddleware(jwtService)
 		adminMiddleware := middleware.AdminAuthMiddleware()
 
@@ -63,6 +79,7 @@ func InitApp() *AppContext {
 			AuthController:   authController,
 			KnightController: knightController,
 			CosmoController:  cosmoController,
+			TeamController:   teamController,
 			AuthMiddleware:   authMiddleware,
 			AdminMiddleware:  adminMiddleware,
 		}
