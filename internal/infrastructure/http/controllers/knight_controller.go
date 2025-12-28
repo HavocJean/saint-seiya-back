@@ -13,20 +13,23 @@ import (
 )
 
 type KnightController struct {
-	createKnightUseCase  *knight.CreateKnightUseCase
-	getKnightsUseCase    *knight.GetKnightsUseCase
-	getKnightByIdUseCase *knight.GetKnightByIdUseCase
+	createKnightUseCase      *knight.CreateKnightUseCase
+	getKnightsUseCase        *knight.GetKnightsUseCase
+	getKnightByIdUseCase     *knight.GetKnightByIdUseCase
+	createKnightSkillUseCase *knight.CreateKnightSkillUseCase
 }
 
 func NewKnightController(
 	createKnightUseCase *knight.CreateKnightUseCase,
 	getKnightsUseCase *knight.GetKnightsUseCase,
 	getKnightByIdUseCase *knight.GetKnightByIdUseCase,
+	createKnightSkillUseCase *knight.CreateKnightSkillUseCase,
 ) *KnightController {
 	return &KnightController{
-		createKnightUseCase:  createKnightUseCase,
-		getKnightsUseCase:    getKnightsUseCase,
-		getKnightByIdUseCase: getKnightByIdUseCase,
+		createKnightUseCase:      createKnightUseCase,
+		getKnightsUseCase:        getKnightsUseCase,
+		getKnightByIdUseCase:     getKnightByIdUseCase,
+		createKnightSkillUseCase: createKnightSkillUseCase,
 	}
 }
 
@@ -127,4 +130,40 @@ func (kc *KnightController) GetKnightByID(c *gin.Context) {
 	}
 
 	responses.Success(c, http.StatusOK, "knight found", result)
+}
+
+func (kc *KnightController) CreateKnightSkill(c *gin.Context) {
+	knightIDString := c.Param("id")
+	knightID, err := strconv.ParseUint(knightIDString, 10, 64)
+
+	if err != nil {
+		responses.Error(c, http.StatusBadRequest, "Id invalid", "Id must be a number")
+		return
+	}
+
+	var req dto.CreateKnightSkillRequest
+	if err := c.ShouldBindJSON(&req); err != nil {
+		if _, ok := err.(validator.ValidationErrors); ok {
+			responses.ValidationError(c, http.StatusBadRequest, err)
+			return
+		}
+		responses.Error(c, http.StatusBadRequest, "Invalid JSON sent", err.Error())
+		return
+	}
+
+	result, err := kc.createKnightSkillUseCase.Execute(knight.CreateKnightSkillInput{
+		KnightID:    uint(knightID),
+		Name:        req.Name,
+		Type:        req.Type,
+		ImageURL:    req.ImageURL,
+		Description: req.Description,
+		Levels:      req.Levels,
+	})
+
+	if err != nil {
+		responses.Error(c, http.StatusInternalServerError, "Failed to create knight skill", err.Error())
+		return
+	}
+
+	responses.Success(c, http.StatusCreated, "Knight skill created successfully", result)
 }

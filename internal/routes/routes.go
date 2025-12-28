@@ -34,7 +34,18 @@ func SetupRoutes(router *gin.Engine, app *bootstrap.AppContext) {
 	adminAuth.Use(app.AdminMiddleware)
 	{
 		adminAuth.POST("/knights", app.KnightController.CreateKnight)
-		// adminAuth.POST("/knights/:id/skills", controllers.CreateKnightSkill)
-		// 	adminAuth.POST("/cosmos", controllers.CreateCosmo)
+		adminAuth.POST("/knights/:id/skills", app.KnightController.CreateKnightSkill)
+		// adminAuth.POST("/cosmos", app.CosmoController.CreateCosmo)
 	}
 }
+
+// CreateCosmo
+// Use Case: CreateCosmoUseCase
+// DTO: CreateCosmoRequest, CreateCosmoResponse
+// Repository: implementar Create no CosmoRepository
+// Controller: método no CosmoController
+// GetPublicTeams (opcional)
+// Use Case: GetPublicTeamsUseCase
+// DTO: GetPublicTeamsResponse, TeamKnightResponse
+// Repository: método GetPublicTeams no TeamRepository
+// Controller: método no TeamController

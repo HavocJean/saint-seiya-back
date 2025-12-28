@@ -34,11 +34,13 @@ func InitApp() *AppContext {
 
 		jwtService := services.NewJwtService(config.Cfg.JWTSecret)
 
+		// repositories
 		userRepository := repositories.NewUserRepository(db)
 		knightRepository := repositories.NewKnightRepository(db)
 		cosmoRepository := repositories.NewCosmoRepository(db)
 		teamRepository := repositories.NewTeamRepository(db)
 
+		// use cases
 		loginUseCase := auth.NewLoginUseCase(userRepository, jwtService)
 		registerUseCase := auth.NewRegisterUseCase(userRepository, jwtService)
 		getUserByIdUseCase := auth.NewUserByIdUseCase(userRepository)
@@ -46,6 +48,7 @@ func InitApp() *AppContext {
 		createKnightUseCase := knight.NewCreateKnightUseCase(knightRepository)
 		getKnightsUseCase := knight.NewGetKnightsUseCase(knightRepository)
 		getKnightByIdUseCase := knight.NewGetKnightByIdUseCase(knightRepository)
+		createKnightSkillUseCase := knight.NewCreateKnightSkillUseCase(knightRepository)
 
 		getCosmosUseCase := cosmo.NewGetCosmosUseCase(cosmoRepository)
 		getCosmoByIdUseCase := cosmo.NewGetCosmoByIdUseCase(cosmoRepository)
@@ -55,12 +58,15 @@ func InitApp() *AppContext {
 		deleteKnightToTeamUseCase := team.NewDeleteKnightToTeamUseCase(teamRepository)
 		deleteTeamUseCase := team.NewDeleteTeamUseCase(teamRepository)
 
+		// controllers
 		authController := controllers.NewAuthController(loginUseCase, registerUseCase, getUserByIdUseCase)
 		knightController := controllers.NewKnightController(
 			createKnightUseCase,
 			getKnightsUseCase,
 			getKnightByIdUseCase,
+			createKnightSkillUseCase,
 		)
+
 		cosmoController := controllers.NewCosmoController(
 			getCosmosUseCase,
 			getCosmoByIdUseCase,
@@ -73,6 +79,7 @@ func InitApp() *AppContext {
 			deleteKnightToTeamUseCase,
 		)
 
+		// middleware and instance
 		authMiddleware := middleware.AuthJwtMiddleware(jwtService)
 		adminMiddleware := middleware.AdminAuthMiddleware()
 

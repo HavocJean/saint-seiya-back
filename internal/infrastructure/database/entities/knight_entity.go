@@ -39,3 +39,34 @@ type KnightEntity struct {
 func (KnightEntity) TableName() string {
 	return "knights"
 }
+
+type KnightSkillEntity struct {
+	ID          uint                     `gorm:"primaryKey" json:"id"`
+	KnightID    uint                     `gorm:"not null" json:"knight_id"`
+	Name        string                   `gorm:"size:150;not null" json:"name"`
+	Type        string                   `gorm:"size:50" json:"type"`
+	ImageURL    *string                  `gorm:"size:255" json:"image_url"`
+	Description string                   `json:"description"`
+	Levels      []KnightSkillLevelEntity `gorm:"foreignKey:SkillID" json:"levels"`
+	CreatedAt   time.Time                `json:"created_at"`
+	UpdatedAt   time.Time                `json:"updated_at"`
+	DeletedAt   gorm.DeletedAt           `gorm:"index" json:"-"`
+}
+
+func (KnightSkillEntity) TableName() string {
+	return "knight_skills"
+}
+
+type KnightSkillLevelEntity struct {
+	ID          uint           `gorm:"primaryKey" json:"id"`
+	SkillID     uint           `gorm:"not null" json:"skill_id"`
+	Level       int            `gorm:"not null" json:"level"`
+	Description string         `json:"description"`
+	CreatedAt   time.Time      `json:"created_at"`
+	UpdatedAt   time.Time      `json:"updated_at"`
+	DeletedAt   gorm.DeletedAt `gorm:"index" json:"-"`
+}
+
+func (KnightSkillLevelEntity) TableName() string {
+	return "knight_skill_levels"
+}

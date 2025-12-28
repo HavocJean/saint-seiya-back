@@ -159,3 +159,50 @@ func (r *knightRepository) Create(k *knight.KnightDomain) (*knight.KnightDomain,
 		ImageURL:        knightEntity.ImageURL,
 	}, nil
 }
+
+func (r *knightRepository) CreateSkill(skillDomain *knight.KnightSkillDomain) (*knight.KnightSkillDomain, error) {
+	skillEntity := &entities.KnightSkillEntity{
+		KnightID:    skillDomain.KnightID,
+		Name:        skillDomain.Name,
+		Type:        skillDomain.Type,
+		ImageURL:    skillDomain.ImageURL,
+		Description: skillDomain.Description,
+	}
+
+	if err := r.db.Create(skillEntity).Error; err != nil {
+		return nil, err
+	}
+
+	levelEntities := make([]entities.KnightSkillLevelEntity, len(skillDomain.Levels))
+	for i, level := range skillDomain.Levels {
+		levelEntities[i] = entities.KnightSkillLevelEntity{
+			SkillID:     skillEntity.ID,
+			Level:       level.Level,
+			Description: level.Description,
+		}
+	}
+
+	if err := r.db.Create(&levelEntities).Error; err != nil {
+		return nil, err
+	}
+
+	levels := make([]knight.KnightSkillLevelDomain, len(levelEntities))
+	for i, levelEntity := range levelEntities {
+		levels[i] = knight.KnightSkillLevelDomain{
+			ID:          levelEntity.ID,
+			SkillID:     levelEntity.SkillID,
+			Level:       levelEntity.Level,
+			Description: levelEntity.Description,
+		}
+	}
+
+	return &knight.KnightSkillDomain{
+		ID:          skillEntity.ID,
+		KnightID:    skillEntity.KnightID,
+		Name:        skillEntity.Name,
+		Type:        skillEntity.Type,
+		ImageURL:    skillEntity.ImageURL,
+		Description: skillEntity.Description,
+		Levels:      levels,
+	}, nil
+}

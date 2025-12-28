@@ -59,3 +59,33 @@ type CreateKnightRequest struct {
 	CritBasicF      *float64 `json:"crit_basic_f" binding:"required"`
 	ImageURL        *string  `json:"image_url"`
 }
+
+type CreateKnightSkillRequest struct {
+	Name        string                          `json:"name" binding:"required"`
+	Type        string                          `json:"type" binding:"required"`
+	ImageURL    *string                         `json:"image_url"`
+	Description string                          `json:"description" binding:"required"`
+	Levels      []CreateKnightSkillLevelRequest `json:"levels" binding:"required"`
+}
+
+type CreateKnightSkillLevelRequest struct {
+	Level       int    `json:"level" binding:"required"`
+	Description string `json:"description" binding:"required"`
+}
+
+type CreateKnightSkillResponse struct {
+	ID          uint                             `json:"id"`
+	KnightID    uint                             `json:"knight_id"`
+	Name        string                           `json:"name"`
+	Type        string                           `json:"type"`
+	ImageURL    *string                          `json:"image_url"`
+	Description string                           `json:"description"`
+	Levels      []CreateKnightSkillLevelResponse `json:"levels"`
+}
+
+type CreateKnightSkillLevelResponse struct {
+	ID          uint   `json:"id"`
+	SkillID     uint   `json:"skill_id"`
+	Level       int    `json:"level"`
+	Description string `json:"description"`
+}

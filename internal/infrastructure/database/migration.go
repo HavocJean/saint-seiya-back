@@ -11,6 +11,8 @@ func MigrateDB() {
 	err := DB.AutoMigrate(
 		&entities.UserEntity{},
 		&entities.KnightEntity{},
+		&entities.KnightSkillEntity{},
+		&entities.KnightSkillLevelEntity{},
 		&entities.CosmoEntity{},
 		&entities.CosmoAttributeEntity{},
 		&entities.TeamEntity{},
