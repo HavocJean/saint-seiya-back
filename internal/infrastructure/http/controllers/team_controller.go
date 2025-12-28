@@ -14,15 +14,15 @@ import (
 type TeamController struct {
 	createTeamUseCase       *team.CreateTeamUseCase
 	addKnightToTeamUseCase  *team.AddKnightToTeamUseCase
-	deleteTeamUseCase       *team.DeleteKnightToTeamUseCase
-	deleteTeamKnightUseCase *team.DeleteTeamUseCase
+	deleteTeamUseCase       *team.DeleteTeamUseCase
+	deleteTeamKnightUseCase *team.DeleteKnightToTeamUseCase
 }
 
 func NewTeamController(
 	createTeamUseCase *team.CreateTeamUseCase,
 	addKnightToTeamUseCase *team.AddKnightToTeamUseCase,
-	deleteTeamKnightUseCase *team.DeleteTeamUseCase,
-	deleteTeamUseCase *team.DeleteKnightToTeamUseCase,
+	deleteTeamUseCase *team.DeleteTeamUseCase,
+	deleteTeamKnightUseCase *team.DeleteKnightToTeamUseCase,
 ) *TeamController {
 	return &TeamController{
 		createTeamUseCase:       createTeamUseCase,
