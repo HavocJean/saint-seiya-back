@@ -11,14 +11,20 @@ import (
 )
 
 type AuthController struct {
-	loginUsecase    *auth.LoginUseCase
-	registerUsecase *auth.RegisterUseCase
+	loginUsecase       *auth.LoginUseCase
+	registerUsecase    *auth.RegisterUseCase
+	getUserByIdUseCase *auth.GetUserByIdUseCase
 }
 
-func NewAuthController(loginU *auth.LoginUseCase, registerU *auth.RegisterUseCase) *AuthController {
+func NewAuthController(
+	loginU *auth.LoginUseCase,
+	registerU *auth.RegisterUseCase,
+	getUserByIdU *auth.GetUserByIdUseCase,
+) *AuthController {
 	return &AuthController{
-		loginUsecase:    loginU,
-		registerUsecase: registerU,
+		loginUsecase:       loginU,
+		registerUsecase:    registerU,
+		getUserByIdUseCase: getUserByIdU,
 	}
 }
 
@@ -68,4 +74,21 @@ func (a *AuthController) LoginUser(c *gin.Context) {
 	responses.Success(c, http.StatusOK, "Login successful", authdto.AuthResponse{
 		Token: output.Token,
 	})
+}
+
+func (a *AuthController) GetProfileUser(c *gin.Context) {
+	userID, exists := c.Get("user_id")
+	if !exists {
+		responses.Error(c, http.StatusUnauthorized, "User ID not found in token", "Unauthorized")
+		return
+	}
+
+	result, err := a.getUserByIdUseCase.Execute(userID.(uint))
+	if err != nil {
+		responses.Error(c, http.StatusNotFound, "User not found", err.Error())
+		return
+	}
+
+	responses.Success(c, http.StatusOK, "Profile found", result)
+
 }

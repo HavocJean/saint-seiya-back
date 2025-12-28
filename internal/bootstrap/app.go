@@ -41,6 +41,7 @@ func InitApp() *AppContext {
 
 		loginUseCase := auth.NewLoginUseCase(userRepository, jwtService)
 		registerUseCase := auth.NewRegisterUseCase(userRepository, jwtService)
+		getUserByIdUseCase := auth.NewUserByIdUseCase(userRepository)
 
 		createKnightUseCase := knight.NewCreateKnightUseCase(knightRepository)
 		getKnightsUseCase := knight.NewGetKnightsUseCase(knightRepository)
@@ -54,7 +55,7 @@ func InitApp() *AppContext {
 		deleteKnightToTeamUseCase := team.NewDeleteKnightToTeamUseCase(teamRepository)
 		deleteTeamUseCase := team.NewDeleteTeamUseCase(teamRepository)
 
-		authController := controllers.NewAuthController(loginUseCase, registerUseCase)
+		authController := controllers.NewAuthController(loginUseCase, registerUseCase, getUserByIdUseCase)
 		knightController := controllers.NewKnightController(
 			createKnightUseCase,
 			getKnightsUseCase,

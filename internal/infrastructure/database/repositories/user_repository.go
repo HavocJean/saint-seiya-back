@@ -40,3 +40,18 @@ func (r *UserRepository) Create(u *user.User) error {
 
 	return r.db.Create(entity).Error
 }
+
+func (r *UserRepository) GetUserById(id uint) (*user.User, error) {
+	var u entities.UserEntity
+	if err := r.db.First(&u, id).Error; err != nil {
+		return nil, err
+	}
+
+	return &user.User{
+		ID:       u.ID,
+		Name:     u.Name,
+		Nickname: u.Nickname,
+		Email:    u.Email,
+		Password: u.Password,
+	}, nil
+}

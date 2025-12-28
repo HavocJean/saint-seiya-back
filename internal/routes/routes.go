@@ -22,7 +22,7 @@ func SetupRoutes(router *gin.Engine, app *bootstrap.AppContext) {
 	auth := v1.Group("")
 	auth.Use(app.AuthMiddleware)
 	{
-		// 	userAuth.GET("/profile", controllers.GetUserProfile)
+		auth.GET("/profile", app.AuthController.GetProfileUser)
 
 		auth.POST("/team", app.TeamController.CreateTeam)
 		auth.POST("/team/add/:id", app.TeamController.AddKnightToTeam)

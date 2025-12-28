@@ -15,3 +15,9 @@ type RegisterRequest struct {
 type AuthResponse struct {
 	Token string `json:"token"`
 }
+
+type UserProfileResponse struct {
+	Name     string `json:"name"`
+	Nickname string `json:"nickname"`
+	Email    string `json:"email"`
+}
