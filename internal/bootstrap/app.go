@@ -52,6 +52,7 @@ func InitApp() *AppContext {
 
 		getCosmosUseCase := cosmo.NewGetCosmosUseCase(cosmoRepository)
 		getCosmoByIdUseCase := cosmo.NewGetCosmoByIdUseCase(cosmoRepository)
+		createCosmoUseCase := cosmo.NewCreateCosmoUseCase(cosmoRepository)
 
 		createTeamUseCase := team.NewCreateTeamUseCase(teamRepository)
 		addKnightToTeamUseCase := team.NewAddKnightToTeamUseCase(teamRepository)
@@ -70,6 +71,7 @@ func InitApp() *AppContext {
 		cosmoController := controllers.NewCosmoController(
 			getCosmosUseCase,
 			getCosmoByIdUseCase,
+			createCosmoUseCase,
 		)
 
 		teamController := controllers.NewTeamController(
