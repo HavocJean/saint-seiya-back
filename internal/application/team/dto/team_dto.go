@@ -21,3 +21,15 @@ type AddKnightToTeamResponse struct {
 	TeamID   uint `json:"team_id"`
 	KnightID uint `json:"knight_id"`
 }
+
+type GetPublicTeamsResponse struct {
+	ID      uint                 `json:"id"`
+	Name    string               `json:"name"`
+	Knights []TeamKnightResponse `json:"knights"`
+}
+
+type TeamKnightResponse struct {
+	KnightID uint   `json:"knight_id"`
+	Name     string `json:"name"`
+	ImageURL string `json:"image_url"`
+}

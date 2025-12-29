@@ -58,6 +58,7 @@ func InitApp() *AppContext {
 		addKnightToTeamUseCase := team.NewAddKnightToTeamUseCase(teamRepository)
 		deleteKnightToTeamUseCase := team.NewDeleteKnightToTeamUseCase(teamRepository)
 		deleteTeamUseCase := team.NewDeleteTeamUseCase(teamRepository)
+		getPublicTeamsUseCase := team.NewGetPublicTeamsUseCase(teamRepository)
 
 		// controllers
 		authController := controllers.NewAuthController(loginUseCase, registerUseCase, getUserByIdUseCase)
@@ -79,6 +80,7 @@ func InitApp() *AppContext {
 			addKnightToTeamUseCase,
 			deleteTeamUseCase,
 			deleteKnightToTeamUseCase,
+			getPublicTeamsUseCase,
 		)
 
 		// middleware and instance

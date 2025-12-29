@@ -127,3 +127,39 @@ func (r *teamRepository) DeleteKnightToTeam(teamID uint, knightID uint) error {
 
 	return nil
 }
+
+func (r *teamRepository) GetPublicTeams(page, limit int) ([]team.TeamWithKnightsDomain, error) {
+	var teamsEntities []entities.TeamEntity
+	offset := (page - 1) * limit
+
+	err := r.db.
+		Preload("TeamKnights.Knight").
+		Where("is_public = ?", true).
+		Offset(offset).
+		Limit(limit).
+		Find(&teamsEntities).Error
+
+	if err != nil {
+		return nil, err
+	}
+
+	result := make([]team.TeamWithKnightsDomain, len(teamsEntities))
+	for i, t := range teamsEntities {
+		knights := make([]team.TeamKnightInfoDomain, len(t.TeamKnights))
+		for j, tk := range t.TeamKnights {
+			knights[j] = team.TeamKnightInfoDomain{
+				KnightID: tk.KnightID,
+				Name:     tk.Knight.Name,
+				ImageURL: tk.Knight.ImageURL,
+			}
+		}
+
+		result[i] = team.TeamWithKnightsDomain{
+			ID:      t.ID,
+			Name:    t.Name,
+			Knights: knights,
+		}
+	}
+
+	return result, nil
+}

@@ -10,4 +10,5 @@ type Repository interface {
 	CountKnightsByTeamID(teamID uint) (int64, error)
 	KnightExistsInTeam(teamID uint, knightID uint) (bool, error)
 	DeleteKnightToTeam(teamID uint, knightID uint) error
+	GetPublicTeams(page, limit int) ([]TeamWithKnightsDomain, error)
 }

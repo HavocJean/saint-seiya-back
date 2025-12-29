@@ -16,6 +16,7 @@ type TeamController struct {
 	addKnightToTeamUseCase  *team.AddKnightToTeamUseCase
 	deleteTeamUseCase       *team.DeleteTeamUseCase
 	deleteTeamKnightUseCase *team.DeleteKnightToTeamUseCase
+	getPublicTeamsUseCase   *team.GetPublicTeamsUseCase
 }
 
 func NewTeamController(
@@ -23,12 +24,14 @@ func NewTeamController(
 	addKnightToTeamUseCase *team.AddKnightToTeamUseCase,
 	deleteTeamUseCase *team.DeleteTeamUseCase,
 	deleteTeamKnightUseCase *team.DeleteKnightToTeamUseCase,
+	getPublicTeamsUseCase *team.GetPublicTeamsUseCase,
 ) *TeamController {
 	return &TeamController{
 		createTeamUseCase:       createTeamUseCase,
 		addKnightToTeamUseCase:  addKnightToTeamUseCase,
 		deleteTeamUseCase:       deleteTeamUseCase,
 		deleteTeamKnightUseCase: deleteTeamKnightUseCase,
+		getPublicTeamsUseCase:   getPublicTeamsUseCase,
 	}
 }
 
@@ -143,4 +146,33 @@ func (tc *TeamController) DeleteTeamKnight(c *gin.Context) {
 	}
 
 	responses.Deleted(c, http.StatusNoContent, "Delete knight from team successfully")
+}
+
+func (tc *TeamController) GetPublicTeams(c *gin.Context) {
+	page := 1
+	limit := 20
+
+	if p := c.Query("page"); p != "" {
+		if parsed, err := strconv.Atoi(p); err == nil && parsed > 0 {
+			page = parsed
+		}
+	}
+
+	if l := c.Query("limit"); l != "" {
+		if parsed, err := strconv.Atoi(l); err == nil && parsed > 0 {
+			limit = parsed
+		}
+	}
+
+	result, err := tc.getPublicTeamsUseCase.Execute(team.GetPublicInput{
+		Page:  page,
+		Limit: limit,
+	})
+
+	if err != nil {
+		responses.Error(c, http.StatusInternalServerError, "Error to get public teams", err.Error())
+		return
+	}
+
+	responses.Success(c, http.StatusOK, "Public teams retrieved successfully", result)
 }

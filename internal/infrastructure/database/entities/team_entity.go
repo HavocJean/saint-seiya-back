@@ -25,6 +25,7 @@ type TeamKnightEntity struct {
 	ID        uint           `gorm:"primaryKey" json:"id"`
 	TeamID    uint           `gorm:"not null" json:"team_id"`
 	KnightID  uint           `gorm:"not null" json:"knight_id"`
+	Knight    KnightEntity   `gorm:"foreignKey:KnightID;references:ID" json:"knight,omitempty"`
 	CreatedAt time.Time      `json:"created_at"`
 	DeletedAt gorm.DeletedAt `gorm:"index" json:"-"`
 }

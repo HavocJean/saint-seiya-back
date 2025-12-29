@@ -13,3 +13,15 @@ type TeamKnightDomain struct {
 	TeamID   uint
 	KnightID uint
 }
+
+type TeamWithKnightsDomain struct {
+	ID      uint
+	Name    string
+	Knights []TeamKnightInfoDomain
+}
+
+type TeamKnightInfoDomain struct {
+	KnightID uint
+	Name     string
+	ImageURL *string
+}
