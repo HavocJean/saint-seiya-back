@@ -29,5 +29,3 @@ go.work.sum
 .vscode/
 .cursor/
 developer.txt
-
-internal_old

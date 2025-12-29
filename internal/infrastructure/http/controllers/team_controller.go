@@ -124,7 +124,7 @@ func (tc *TeamController) DeleteTeam(c *gin.Context) {
 }
 
 func (tc *TeamController) DeleteTeamKnight(c *gin.Context) {
-	teamIDString := c.Param("teamId")
+	teamIDString := c.Param("id")
 	teamID, errTeamID := strconv.ParseUint(teamIDString, 10, 64)
 
 	knightIDString := c.Param("knightId")

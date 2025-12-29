@@ -10,8 +10,8 @@ func SetupRoutes(router *gin.Engine, app *bootstrap.AppContext) {
 
 	v1 := router.Group("/api/v1")
 
-	v1.POST("/register", app.AuthController.RegisterUser)
-	v1.POST("/login", app.AuthController.LoginUser)
+	v1.POST("/user/register", app.AuthController.RegisterUser)
+	v1.POST("/user/login", app.AuthController.LoginUser)
 
 	v1.GET("/knights", app.KnightController.GetKnights)
 	v1.GET("/knights/:id", app.KnightController.GetKnightByID)
@@ -24,12 +24,12 @@ func SetupRoutes(router *gin.Engine, app *bootstrap.AppContext) {
 	auth := v1.Group("")
 	auth.Use(app.AuthMiddleware)
 	{
-		auth.GET("/profile", app.AuthController.GetProfileUser)
+		auth.GET("/user/profile", app.AuthController.GetProfileUser)
 
 		auth.POST("/team", app.TeamController.CreateTeam)
 		auth.POST("/team/add/:id", app.TeamController.AddKnightToTeam)
 		auth.DELETE("/team/:id", app.TeamController.DeleteTeam)
-		auth.DELETE("/team/:teamId/knight/:knightId", app.TeamController.DeleteTeamKnight)
+		auth.DELETE("/team/:id/knight/:knightId", app.TeamController.DeleteTeamKnight)
 	}
 
 	adminAuth := v1.Group("/admin")
