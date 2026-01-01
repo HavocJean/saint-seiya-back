@@ -23,7 +23,7 @@ func ConnectDb() {
 
 	var db *gorm.DB
 	var err error
-	maxAttempts := 15
+	maxAttempts := 10
 
 	for attempt := 1; attempt <= maxAttempts; attempt++ {
 		db, err = gorm.Open(postgres.Open(dsn), &gorm.Config{})

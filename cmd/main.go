@@ -33,7 +33,11 @@ func main() {
 	app := bootstrap.InitApp()
 
 	router := gin.Default()
+
+	router.Use(middleware.RecoveryMiddleware())
+
 	router.Use(middleware.LoggerMiddleware())
+
 	router.Use(cors.New(cors.Config{
 		AllowOrigins:     []string{os.Getenv("FRONTEND_URL")},
 		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
@@ -45,5 +49,11 @@ func main() {
 	routes.SetupRoutes(router, app)
 
 	log.Info().Str("port", config.Cfg.Port).Msg("Server starting")
-	router.Run(":" + config.Cfg.Port)
+
+	if err := router.Run(":" + config.Cfg.Port); err != nil {
+		log.Fatal().
+			Err(err).
+			Str("port", config.Cfg.Port).
+			Msg("Failed to start server")
+	}
 }
