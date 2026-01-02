@@ -27,10 +27,9 @@ func main() {
 
 	if config.Cfg.RunMigrations == "true" {
 		database.MigrateDB()
-		log.Info().Msg("Database migrations completed")
 	}
 
-	app := bootstrap.InitApp()
+	app := bootstrap.BuildApp(database.GetDB())
 
 	router := gin.Default()
 
@@ -46,6 +45,7 @@ func main() {
 		AllowCredentials: true,
 		MaxAge:           12 * time.Hour,
 	}))
+
 	routes.SetupRoutes(router, app)
 
 	log.Info().Str("port", config.Cfg.Port).Msg("Server starting")
