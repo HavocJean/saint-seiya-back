@@ -11,6 +11,7 @@ Desenvolvida em Go seguindo os princípios de Domain-Driven Design (DDD).
 - **PostgreSQL** - Banco de dados relacional
 - **JWT** - Autenticação baseada em tokens
 - **Docker & Docker Compose** - Containerização
+- **Grafana & Loki** - Observabilidade e agregação de logs
 - **Air** - Hot reload para desenvolvimento (pendente)
 
 ## 📋 Pré-requisitos
@@ -123,6 +124,11 @@ saint-seiya-back/
 │   │       └── middleware/
 │   ├── responses/
 │   └── routes/
+├── tests/
+│   └── e2e/
+│       └── setup/
+├── observability/
+│   └── promtail/
 ├── docker-compose.yml
 ├── Dockerfile
 ├── go.mod
@@ -169,11 +175,84 @@ Para executar manualmente:
 // quando config.Cfg.RunMigrations == "true"
 ```
 
-### Testes (pendente)
+### Testes
 
+O projeto possui testes end-to-end (E2E) que validam o fluxo completo das funcionalidades da API.
+
+#### Estrutura de Testes
+
+Os testes estão localizados em `tests/e2e/` e incluem:
+- **Testes de Autenticação**: Login e registro de usuários
+- **Validações**: Testes de validação de dados de entrada
+- **Cenários de Erro**: Testes para casos de falha (credenciais inválidas, emails duplicados, etc.)
+
+#### Banco de Dados de Teste
+
+Os testes utilizam um banco de dados PostgreSQL separado configurado no Docker Compose:
+- **Porta**: `5433`
+- **Nome do banco**: `saintseiya_test`
+- **Container**: `saintseiya_db_test`
+
+#### Executando os Testes
+
+1. Certifique-se de que o banco de teste está rodando:
 ```bash
-go test ./...
+docker compose up db_test -d
 ```
+
+2. Execute os testes:
+```bash
+go test ./tests/e2e/...
+```
+
+3. Para executar um teste específico:
+```bash
+go test ./tests/e2e/... -run TestLoginE2E
+```
+
+4. Para executar com verbose:
+```bash
+go test ./tests/e2e/... -v
+```
+
+Os testes incluem setup automático de migrações e limpeza do banco de dados antes e após cada execução.
+
+## 📊 Observabilidade
+
+O projeto utiliza **Grafana** e **Loki** para observabilidade e monitoramento de logs da aplicação.
+
+### Stack de Observabilidade
+
+- **Grafana**: Interface de visualização e dashboards (porta `3000`)
+- **Loki**: Sistema de agregação de logs (porta `3100`)
+- **Promtail**: Coletor de logs dos containers Docker (porta `9080`)
+
+### Acessando o Grafana
+
+1. Após iniciar os serviços, acesse: `http://localhost:3000`
+2. Credenciais padrão:
+   - **Usuário**: `admin`
+   - **Senha**: `admin`
+
+### Configurando o Loki no Grafana
+
+1. No Grafana, vá em **Configuration** → **Data Sources**
+2. Clique em **Add data source**
+3. Selecione **Loki**
+4. Configure a URL: `http://loki:3100`
+5. Clique em **Save & Test**
+
+### Visualizando Logs
+
+Após configurar o Loki como data source, você pode:
+- Criar dashboards personalizados
+- Visualizar logs em tempo real
+- Filtrar logs por container, nível, etc.
+- Usar queries LogQL para análises avançadas
+
+### Configuração do Promtail
+
+O Promtail está configurado para coletar logs do container `saint-seiya-back` automaticamente. A configuração está em `observability/promtail/promtail.yaml`.
 
 ## 🔧 Variáveis de Ambiente
 
@@ -198,6 +277,7 @@ go test ./...
 - `github.com/golang-jwt/jwt/v5` - JWT
 - `github.com/go-playground/validator/v10` - Validação
 - `github.com/joho/godotenv` - Gerenciamento de variáveis de ambiente
+- `github.com/stretchr/testify` - Framework de testes e asserções
 
 ## 🤝 Contribuindo
 
