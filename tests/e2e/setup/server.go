@@ -2,6 +2,7 @@ package setup
 
 import (
 	"saint-seiya-back/internal/bootstrap"
+	"saint-seiya-back/internal/config"
 	"saint-seiya-back/internal/infrastructure/http/middleware"
 	"saint-seiya-back/internal/routes"
 
@@ -10,6 +11,8 @@ import (
 )
 
 func SetupTestServer(db *gorm.DB) *gin.Engine {
+	config.Load()
+
 	gin.SetMode(gin.TestMode)
 
 	app := bootstrap.BuildApp(db)
